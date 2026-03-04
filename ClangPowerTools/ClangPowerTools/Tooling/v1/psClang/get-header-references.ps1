@@ -187,8 +187,8 @@ Function Get-SourceCodeIncludeProjects([Parameter(Mandatory = $false)][System.IO
                     $inClIncludeSection = $true
                 }
 
-                [string] $filePath = $line.Substring($clPrefix.Length, `
-                                                     $line.Length - $clPrefix.Length - $clSuffix.Length)
+                [string] $rest     = $line.Substring($clPrefix.Length)
+                [string] $filePath = $rest.Substring(0, $rest.IndexOf('"'))
                 if (![System.IO.Path]::IsPathRooted($filePath))
                 {
                     $filePath = Canonize-Path -base $projDir -child $filePath -ignoreErrors
