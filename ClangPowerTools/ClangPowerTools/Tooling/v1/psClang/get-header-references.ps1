@@ -189,9 +189,11 @@ Function Get-SourceCodeIncludeProjects([Parameter(Mandatory = $false)][System.IO
 
                 [string] $rest     = $line.Substring($clPrefix.Length)
                 [string] $filePath = $rest.Substring(0, $rest.IndexOf('"'))
+                Write-Verbose "Checking project $($proj.FullName) for reference to $filePath"
                 if (![System.IO.Path]::IsPathRooted($filePath))
                 {
                     $filePath = Canonize-Path -base $projDir -child $filePath -ignoreErrors
+                    Write-Verbose "Canonized path: $filePath"
                 }
                 if ([string]::IsNullOrEmpty($filePath))
                 {
@@ -203,6 +205,7 @@ Function Get-SourceCodeIncludeProjects([Parameter(Mandatory = $false)][System.IO
                     $fileCache.ContainsKey($sourceFile.Name.Trim().ToLower()))
                 {
                     $matchedProjects += $proj
+                    Write-Verbose "Project $($proj.FullName) references $($sourceFile.FullName), adding to list of projects to process."
                     break
                 }
             }
